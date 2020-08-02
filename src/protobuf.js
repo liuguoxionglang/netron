@@ -2,7 +2,7 @@
 /* jshint esversion: 6 */
 
 var protobuf = protobuf || {};
-var long = long || { Long: require('long') };
+var base = base || require('./base');
 
 protobuf.get = (name) => {
     protobuf._map = protobuf._map || new Map();
@@ -801,7 +801,8 @@ protobuf.TextReader = class {
     }
 };
 
-protobuf.Long = long.Long;
+protobuf.Int64 = base.Int64;
+protobuf.Uint64 = base.Uint64;
 
 protobuf.LongBits = class {
 
@@ -811,9 +812,7 @@ protobuf.LongBits = class {
     }
 
     toLong(unsigned) {
-        return protobuf.Long
-            ? new protobuf.Long(this.lo | 0, this.hi | 0, unsigned)
-            : { low: this.lo | 0, high: this.hi | 0, unsigned: unsigned };
+        return unsigned ? new base.Uint64(this.lo, this.hi) : new base.Int64(this.lo, this.hi);
     }
 
     toNumber(unsigned) {
@@ -883,6 +882,7 @@ if (typeof module !== 'undefined' && typeof module.exports === 'object') {
     module.exports.Reader = protobuf.Reader;
     module.exports.TextReader = protobuf.TextReader;
     module.exports.Error = protobuf.Error;
-    module.exports.Long = protobuf.Long;
+    module.exports.Int64 = protobuf.Int64;
+    module.exports.Uint64 = protobuf.Uint64;
     module.exports.get = protobuf.get;
 }
